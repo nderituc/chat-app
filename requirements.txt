@@ -1,4 +1,5 @@
 openai
+langchain-openai
 langchain
 streamlit
 pandas
