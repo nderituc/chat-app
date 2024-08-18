@@ -12,3 +12,4 @@ scikit-learn
 requests
 beautifulsoup4
 pypdf
+faiss-cpu
