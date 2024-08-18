@@ -1,4 +1,5 @@
 import openai
+import faiss
 #from langchain.llms import OpenAI
 from langchain_openai import OpenAI
 import streamlit as st
