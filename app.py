@@ -1,7 +1,5 @@
 import openai
 from langchain import OpenAI
-import datetime
-import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -20,13 +18,9 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.faiss import FAISS
 
-
-
-
 # Set OpenAI API key
 api_key = st.secrets["OPENAI_API_KEY"]
-
-
+openai.api_key = api_key
 
 # Hide 'Made with Streamlit' footer
 st.markdown("""
@@ -37,8 +31,10 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Create directories for logs and saved chats
-os.makedirs('Chat Logs', exist_ok=True)
-os.makedirs('Saved Chats', exist_ok=True)
+if not os.path.exists('Chat Logs'):
+    os.makedirs('Chat Logs')
+if not os.path.exists('Saved Chats'):
+    os.makedirs('Saved Chats')
 
 # Generate log file path
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -47,7 +43,7 @@ log_file_path = os.path.join('Chat Logs', f'log_{timestamp}.txt')
 # Initialize session state for typed query history
 if 'typed_query_history' not in st.session_state:
     st.session_state.typed_query_history = []
-    
+
 # Google Scholar scraping function for peer-reviewed research
 def scrape_google_scholar(query):
     url = "https://scholar.google.com/scholar?q=" + "+".join(query.split())
@@ -72,7 +68,6 @@ def scrape_google_scholar(query):
         return articles
     else:
         return "Failed to retrieve data with status code: " + str(response.status_code)
-
 
 # Data analysis functions
 def generate_bar_chart(df, column):
@@ -112,21 +107,19 @@ def build_linear_regression_model(df):
     else:
         st.sidebar.write("Not enough numeric columns for regression analysis.")
         
-
 def download_csv(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download CSV File</a>'
     st.markdown(href, unsafe_allow_html=True)
-    
- #Document analysis functions  
+
+# Document analysis functions  
 def parse_pdf(file):
     pdf = PdfReader(file)
     output = []
     for page in pdf.pages:
         text = page.extract_text()
         output.append(text)
-
     return "\n\n".join(output)
 
 def embed_text(text):
@@ -135,20 +128,15 @@ def embed_text(text):
         chunk_size=800, chunk_overlap=0, separators=["\n\n", ".", "?", "!", " ", ""]
     )
     texts = text_splitter.split_text(text)
-
     embeddings = OpenAIEmbeddings()
     index = FAISS.from_texts(texts, embeddings)
-
     return index
 
 def get_answer(index, query):
     """Returns answer to a query using langchain QA chain"""
-
     docs = index.similarity_search(query)
-
     chain = load_qa_chain(OpenAI(temperature=0))
     answer = chain.run(input_documents=docs, question=query)
-
     return answer
 
 def generate_seaborn_plot(df):
@@ -183,7 +171,6 @@ def main():
 def display_home_with_chatbot():
     st.title('Welcome to GPT Analyst - Chatbot')
     handle_chatbot_queries()
-
 
 def display_data_analysis():
     st.title('Data Analysis Tools')
@@ -235,7 +222,7 @@ def handle_chatbot_queries():
         for source_data in response_data["responses"]:
             st.write(source_data['response'])
         st.session_state.typed_query_history.append(response_data)
-        
+
 def display_document_analysis():
     st.title("Doc QA")
     uploaded_file = st.file_uploader("Upload a pdf", type=["pdf"])
@@ -245,7 +232,6 @@ def display_document_analysis():
         button = st.button("Submit")
         if button:
             st.write(get_answer(index, query))
-
 
 if __name__ == "__main__":
     main()
