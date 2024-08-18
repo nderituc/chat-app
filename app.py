@@ -220,7 +220,7 @@ def handle_chatbot_queries():
     if user_query:
         response_data = {"user_query": user_query, "responses": []}
         response_obj = openai.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": user_query}])
-        response = response_obj.choices[0].ChatCompletionMessage["content"]
+        response = response_obj.choices[0].message[0]
         response_data["responses"].append({"name": "OpenAI", "response": response})
         for source_data in response_data["responses"]:
             st.write(source_data['response'])
