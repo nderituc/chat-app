@@ -18,7 +18,7 @@ from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 from langchain_openai import OpenAIEmbeddings
-from langchain_openai.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 
 # Set OpenAI API key
 api_key = st.secrets["OPENAI_API_KEY"]
