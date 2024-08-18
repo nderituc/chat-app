@@ -1,5 +1,6 @@
 import openai
-from langchain.llms import OpenAI
+#from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 import streamlit as st
 import pandas as pd
 import numpy as np
