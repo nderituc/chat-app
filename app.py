@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain.vectorstores.faiss import FAISS
 
 # Set OpenAI API key
