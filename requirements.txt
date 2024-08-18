@@ -1,1 +1,16 @@
-
+openai
+langcahain
+os
+datetime
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+Scikit-learn
+base6
+requests
+bs4
+pypdf
+langchain
