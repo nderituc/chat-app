@@ -1,5 +1,4 @@
 openai
-langchain
 os
 datetime
 streamlit
