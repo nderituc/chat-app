@@ -7,7 +7,6 @@ matplotlib
 seaborn
 plotly
 scikit-learn
-base64
 requests
 beautifulsoup4
 pypdf
