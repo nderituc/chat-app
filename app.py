@@ -203,7 +203,7 @@ def display_data_analysis():
 
 def display_peer_reviewed_research():
     st.title('Peer-reviewed Research')
-    query = st.text_input('Enter your research query for peer-reviewed articles:')
+    query = st.text_input('Enter your research query/topic for peer-reviewed articles:')
     if query:
         results = scrape_google_scholar(query)
         if isinstance(results, list) and results:
